@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dacn.backend.business.UserAccessBusiness;
@@ -50,5 +51,11 @@ public class UserAccessApi {
 	@PostMapping("/user/assignMachine")
 	public ResponseEntity<List<User>> assignMachine(@RequestBody AssignMachineReq req) throws Exception{
 		return userAccessBusiness.assignMachine(req.getAssignMachineList());
+	}
+	
+	@ApiOperation(value = "Login", response = ResponseEntity.class)
+	@PostMapping("/user/login")
+	public ResponseEntity<User> login(@RequestParam String username, @RequestParam String password) throws Exception{
+		return userAccessBusiness.login(username, password);
 	}
 }

@@ -126,4 +126,18 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 		return new ResponseEntity<>(userList, HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<User> login(String username, String password) throws Exception {
+		User user = userRepo.getLoginInfo(username);
+		
+		if (user == null) {
+			throw new Exception("user not found");
+		}
+		if (!user.getPassword().equals(password)) {
+			throw new Exception("wrong password");
+		}
+		
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
 }
