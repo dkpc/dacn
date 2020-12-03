@@ -18,4 +18,6 @@ public interface UserAccessBusiness {
 	public ResponseEntity<List<User>> insertStudentList(MultipartFile file, String className) throws Exception;
 	
 	public ResponseEntity<List<User>> assignMachine(List<AssignMachineBO> lst) throws Exception;
+	
+	public ResponseEntity<User> login(String username, String password) throws Exception;
 }

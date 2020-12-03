@@ -52,4 +52,21 @@ public class UserRepoImpl implements UserRepoCustom{
         
 		return lst.get(0);
 	}
+
+
+	@Override
+	public User getLoginInfo(String username) {
+		StringBuilder sb = new StringBuilder();
+        
+        sb.append("SELECT t FROM User t ");
+        sb.append("WHERE t.username = :username");   
+		
+        Query qr = em.createQuery(sb.toString());
+        
+        qr.setParameter("username", username);
+        
+        List<User> lst = qr.getResultList();
+        
+		return lst.get(0);
+	}
 }

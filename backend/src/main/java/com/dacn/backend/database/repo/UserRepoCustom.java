@@ -23,4 +23,6 @@ public interface UserRepoCustom {
 	 * @return
 	 */
 	public User findUserById(int studentId);
+	
+	public User getLoginInfo(String username);
 }
