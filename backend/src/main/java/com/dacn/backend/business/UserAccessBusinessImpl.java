@@ -11,9 +11,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dacn.backend.BO.AssignMachineBO;
@@ -21,95 +20,127 @@ import com.dacn.backend.database.entity.Machine;
 import com.dacn.backend.database.entity.User;
 import com.dacn.backend.database.repo.MachineRepo;
 import com.dacn.backend.database.repo.UserRepo;
+import com.dacn.backend.response.LoginRes;
 
 @Service
 public class UserAccessBusinessImpl implements UserAccessBusiness{
+	
+	private final double studCount = 15.0;
+	private double machine;
 
 	@Autowired
 	private UserRepo userRepo;
 	
 	@Autowired
-	private MachineManageBusiness machineManageBusiness;
-	
-	@Autowired
 	private MachineRepo machineRepo;
 	
+	@Autowired
+	private MachineManageBusiness machineManageBusiness;
+	
 	@Override
-	public ResponseEntity<User> addUser(String username, String password, String name, String className, int assignedMachineId,
+	public User addUser(String username, String password, String name, String className, int assignedMachineId,
 			String role, int studentId) throws Exception {
-		User user = userRepo.addUser(username, password, name, className, assignedMachineId, role, studentId);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		User user = userRepo.addUser(username, password, name, className, assignedMachineId, role, studentId, "", "");
+		return user;
 	}
 
 	@Override
-	public ResponseEntity<User> findUserById(int studentId) throws Exception {
-		User user = userRepo.findUserById(studentId);
-		
+	public User findUserByStudentId(int studentId) throws Exception {
+		User user = userRepo.findUserByStudentId(studentId);
 		if (user == null) {
-			throw new Exception();
+			user = new User();
 		}
 		
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		return user;
 	}
 
 	@SuppressWarnings("resource")
 	@Override
-	public ResponseEntity<List<User>> insertStudentList(MultipartFile file, String className) throws Exception {
+	public List<User> insertStudentList(MultipartFile file, String className) throws Exception {
+		List<Machine> lstMachine = machineRepo.getAllMachine();
 		List<User> lst = new ArrayList<>();
 		try {
-			User user = new User();
 			if (file.getOriginalFilename().endsWith(".xlsx")) {
 				XSSFWorkbook myWorkBook = new XSSFWorkbook (file.getInputStream());
 				XSSFSheet mySheet = myWorkBook.getSheetAt(0); 
-				for(int i=1; i < mySheet.getPhysicalNumberOfRows(); i++) {		
-			            
-			        XSSFRow row = mySheet.getRow(i);
-			        Double studentId = Double.valueOf(row.getCell(1).getNumericCellValue());
-			        String name = row.getCell(2).getStringCellValue();
-			        user.setClassName(className);
-			        user.setRole("std");
-			        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
-			        user.setUsername(Integer.toString(user.getStudentId()));
-					user.setPassword(Integer.toString(user.getStudentId()));
-					user.setName(row.getCell(2).getStringCellValue());
-					lst.add(user);
-					userRepo.addUser(Integer.toString(studentId.intValue()), Integer.toString(studentId.intValue()),
-							name, className, 0, "std", studentId.intValue());
+				machine = Math.ceil(mySheet.getPhysicalNumberOfRows() / studCount);
+				if (machine + lstMachine.size() <= 10) {
+					int count = 1;
+					int machineCount = 1;
+					for(int i=0; i < mySheet.getPhysicalNumberOfRows(); i++) {		
+				        XSSFRow row = mySheet.getRow(i);
+				        User user = new User();
+				        if (count > studCount) {
+				        	count = 1;
+				        	machineCount++;
+				        } 
+				        if (count <= studCount) {
+				        	if (machineCount <= machine) {
+				        		user.setAssignedMachineId(machineCount*10);
+					        	user.setMachineUsername("user" + count);
+					        	user.setMachinePassword("user" + count);
+					        	count++;
+				        	}
+				        } 
+				        user.setClassName(className);
+				        user.setRole("std");
+				        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
+				        user.setUsername(Integer.toString(user.getStudentId()));
+						user.setPassword(Integer.toString(user.getStudentId()));
+						user.setName(row.getCell(2).getStringCellValue());
+						lst.add(user);
+						userRepo.save(user);
+					}	
+					machineManageBusiness.createMachine((int) machine);
 				}
 			} else if (file.getOriginalFilename().endsWith(".xls")) {
 				HSSFWorkbook myWorkBook = new HSSFWorkbook(file.getInputStream());
 				HSSFSheet mySheet = myWorkBook.getSheetAt(0);
-				for (int i = 1; i < mySheet.getPhysicalNumberOfRows(); i++) {
-
-			        HSSFRow row = mySheet.getRow(i);
-			        Double studentId = Double.valueOf(row.getCell(1).getNumericCellValue());
-			        String name = row.getCell(2).getStringCellValue();
-			        user.setClassName(className);
-			        user.setRole("std");
-			        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
-			        user.setUsername(Integer.toString(user.getStudentId()));
-			        user.setPassword(Integer.toString(user.getStudentId()));
-			        user.setName(row.getCell(2).getStringCellValue());
-			        lst.add(user);
-			        userRepo.addUser(Integer.toString(studentId.intValue()), Integer.toString(studentId.intValue()),
-							name, className, 0, "std", studentId.intValue());
-			    }
+				machine = Math.ceil(mySheet.getPhysicalNumberOfRows() / studCount);
+				if (machine + lstMachine.size() <= 10) {
+					int count = 1;
+					int machineCount = 1;
+					for (int i = 0; i < mySheet.getPhysicalNumberOfRows(); i++) {
+				        HSSFRow row = mySheet.getRow(i);
+				        User user = new User();
+				        if (count > studCount) {
+				        	count = 1;
+				        	machineCount++;
+				        } 
+				        if (count <= studCount) {
+				        	if (machineCount <= machine) {
+				        		user.setAssignedMachineId(machineCount*10);
+					        	user.setMachineUsername("user" + count);
+					        	user.setMachinePassword("user" + count);
+					        	count++;
+				        	}
+				        } 
+				        user.setClassName(className);
+				        user.setRole("std");
+				        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
+				        user.setUsername(Integer.toString(user.getStudentId()));
+				        user.setPassword(Integer.toString(user.getStudentId()));
+				        user.setName(row.getCell(2).getStringCellValue());
+				        lst.add(user);
+				        userRepo.save(user);
+				    }
+					machineManageBusiness.createMachine((int) machine);
+				}		
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		int count = lst.size();
-		machineManageBusiness.getMachine(count);
-		return new ResponseEntity<>(lst, HttpStatus.OK);
+		
+		return lst;
 	}
 
 	@Override
-	public ResponseEntity<List<User>> assignMachine(List<AssignMachineBO> lst) throws Exception{
+	public List<User> assignMachine(List<AssignMachineBO> lst) throws Exception{
 		List<User> userList = new ArrayList<>();
 		for (int i = 0; i < lst.size(); i++) {
 			AssignMachineBO a = lst.get(i);
-			User user = userRepo.findUserById(a.getStudentId());
+			User user = userRepo.findUserByStudentId(a.getStudentId());
 			if (user == null) {
 				throw new Exception("User not found");
 			}
@@ -123,11 +154,12 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 			userRepo.save(user);
 			userList.add(user);
 		}
-		return new ResponseEntity<>(userList, HttpStatus.OK);
+		return userList;
 	}
+	
 
 	@Override
-	public ResponseEntity<User> login(String username, String password) throws Exception {
+	public Object login(String username, String password) throws Exception {
 		User user = userRepo.getLoginInfo(username);
 		
 		if (user == null) {
@@ -136,8 +168,23 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 		if (!user.getPassword().equals(password)) {
 			throw new Exception("wrong password");
 		}
-		
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		if (user.getRole().equals("std")) {
+			
+			LoginRes res = new LoginRes();
+			res.setUser(user);
+			Machine machine = machineRepo.getOne(user.getAssignedMachineId());
+			String console = machineManageBusiness.getConsoleLink(machine.getCode());
+			res.setConsole(console);
+			return res;
+		}
+		return user;
+	}
+
+	@Override
+	@Transactional
+	public Object deleteByClassname(String classname) {
+		userRepo.deleteAll(classname);
+		return "Deleted Successfully";
 	}
 
 }

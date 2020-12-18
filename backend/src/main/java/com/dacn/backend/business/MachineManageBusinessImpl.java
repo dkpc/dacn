@@ -3,13 +3,23 @@ package com.dacn.backend.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.dacn.backend.database.entity.Machine;
+import com.dacn.backend.database.repo.MachineRepo;
+import com.dacn.backend.database.repo.UserRepo;
 import com.dacn.backend.response.CreateInstanceResponse;
 import com.dacn.backend.response.GetConsoleResponse;
 
@@ -18,23 +28,17 @@ public class MachineManageBusinessImpl implements MachineManageBusiness{
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final int studentCount = 15;
-
-	@Override
-	public List<Machine> getMachine(int count) {
-		List<Machine> lst = new ArrayList<>();
-		String token = getToken();
-		List<String> machineIds = createMachine(count, token);
-		machineIds.forEach(m -> {
-			Machine machine = new Machine();
-			String machineConsoleUrl = getConsoleLink(m, token);
-			machine.setCode(machineConsoleUrl);
-			machine.setStudentCount(studentCount);
-			lst.add(machine);
-		});
-		return lst;
-	}
 	
-	public List<String> createMachine(int count, String token){
+	@Autowired
+	private MachineRepo machineRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
+
+	@Transactional
+	@Override
+	public List<String> createMachine(int count){
+		String token = getToken();
 		String url = "http://112.137.129.214:58774/v2.1/servers";
 		List<String> lst = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
@@ -56,6 +60,10 @@ public class MachineManageBusinessImpl implements MachineManageBusiness{
 			HttpEntity<String> entity = new HttpEntity<String>(jsonString,headers);
 			CreateInstanceResponse response = restTemplate.postForObject(url, entity, CreateInstanceResponse.class);
 			String machineId = response.getServer().getId();
+			Machine machine = new Machine();
+			machine.setCode(machineId);
+			machine.setStudentCount(studentCount);
+			machineRepo.save(machine);
 			lst.add(machineId);
 		}
 		return lst;
@@ -83,7 +91,9 @@ public class MachineManageBusinessImpl implements MachineManageBusiness{
 		return response;
 	}
 	
-	public String getConsoleLink(String machineId, String token) {
+	@Override
+	public String getConsoleLink(String machineId) {
+		String token = getToken();
 		String url = "http://112.137.129.214:58774/v2.1/servers/"
 				+ machineId
 				+ "/action";
@@ -100,5 +110,33 @@ public class MachineManageBusinessImpl implements MachineManageBusiness{
 		}
 		
 		return response.getConsole().getUrl();
+	}
+	
+	@Override
+	@Transactional
+	public void deleteAllMachine() {
+		String token = getToken();
+		List<Machine> lst = machineRepo.findAll();
+		lst.forEach(m -> {
+			String url = "http://112.137.129.214:58774/v2.1/servers/" + m.getCode();
+			MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+			headers.set("X-Auth-Token", token);
+			
+			HttpEntity<?> request = new HttpEntity<Object>(headers);
+			restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+		});
+		machineRepo.deleteAllMachine();
+	}
+
+	@Override
+	@Transactional
+	public List<String> createMachineWithClassname(String classname) {
+		int machineCount = userRepo.getMachineInfo(classname);
+		return createMachine(machineCount);
+	}
+
+	@Override
+	public ResponseEntity<List<Machine>> getAllMachine() {
+		return new ResponseEntity<>(machineRepo.getAllMachine(), HttpStatus.OK);
 	}
 }

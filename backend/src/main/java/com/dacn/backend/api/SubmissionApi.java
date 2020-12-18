@@ -31,16 +31,14 @@ public class SubmissionApi {
 	private UserAccessBusiness userAccessBusiness;
 	
 	@ApiOperation(value = "Submit file for student submission and adding student list", response = ResponseEntity.class)
-	@RequestMapping(value = "/submit", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Object> submitText(@RequestParam("file") MultipartFile file,
-			@RequestParam("studentId") int studentId, @RequestParam("machineId") int machineId,
-			@RequestParam("examId") int examId, @RequestParam("className") String className) throws Exception {
-
+	@RequestMapping(value = "/submit/submit", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Object> submitText(@RequestParam MultipartFile file, @RequestParam int studentId,
+			@RequestParam int machineId, @RequestParam int examId, @RequestParam String classname) throws Exception {
 		if (file.getOriginalFilename().endsWith(".txt")) {
 			File converted = new File(System.getProperty("user.dir") + "/uploads");
 			file.transferTo(converted);
-			return new ResponseEntity<>(studentSubmissionBusiness.submit(converted, studentId, machineId, examId, className), HttpStatus.OK);	
+			return new ResponseEntity<>(studentSubmissionBusiness.submit(converted, studentId, machineId, examId, classname), HttpStatus.OK);	
 		}
-		return new ResponseEntity<>(userAccessBusiness.insertStudentList(file, className), HttpStatus.OK);	
+		return new ResponseEntity<>(userAccessBusiness.insertStudentList(file, classname), HttpStatus.OK);	
 	}
 }
