@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dacn.backend.common.TextUtil;
 import com.dacn.backend.database.entity.Exam;
@@ -31,9 +32,10 @@ public class StudentSubmissionBusinessImpl implements StudentSubmissionBusiness{
 	private GradingBusiness gradingBusiness;
 	
 	@Override
+	@Transactional
 	public ResponseEntity<Submission> submit(File file, int studentId, int machineId, int examId, String className) throws Exception {
 
-		User user = userRepo.findUserById(studentId);
+		User user = userRepo.findUserByStudentId(studentId);
 		if (user == null) {
 			throw new Exception("User not found");
 		}

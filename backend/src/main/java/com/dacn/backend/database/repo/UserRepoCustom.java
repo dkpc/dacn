@@ -15,14 +15,19 @@ public interface UserRepoCustom {
 	 * @param studentId
 	 * @return
 	 */
-	public User addUser(String username, String password, String name, String className, int assignedMachineId, String role, int studentId);
-	
+	public User addUser(String username, String password, String name, String className, int assignedMachineId,
+			String role, int studentId, String machineUsername, String machinePassword);
+
 	/**
 	 * 
 	 * @param studentId
 	 * @return
 	 */
-	public User findUserById(int studentId);
+	public User findUserByStudentId(int studentId);
 	
 	public User getLoginInfo(String username);
+	
+	public int getMachineInfo(String classname);
+	
+	public void deleteAll(String classname);
 }

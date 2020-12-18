@@ -1,5 +1,7 @@
 package com.dacn.backend.database.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,12 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "USER", schema = "HDH")
-public class User {
+public class User implements Serializable{
 	
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private int id;
 
@@ -29,7 +32,7 @@ public class User {
 	private int studentId;
 	
 	@Column(name = "class_name")
-	private String className;
+	private String classname;
 	
 	@Column(name = "assigned_machine_id")
 	private int assignedMachineId;
@@ -76,11 +79,11 @@ public class User {
 	}
 
 	public String getClassName() {
-		return className;
+		return classname;
 	}
 
 	public void setClassName(String className) {
-		this.className = className;
+		this.classname = className;
 	}
 
 	public int getAssignedMachineId() {
