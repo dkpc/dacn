@@ -116,7 +116,7 @@ public class MachineManageBusinessImpl implements MachineManageBusiness{
 	@Transactional
 	public void deleteAllMachine() {
 		String token = getToken();
-		List<Machine> lst = machineRepo.findAll();
+		List<Machine> lst = machineRepo.getAllMachine();
 		lst.forEach(m -> {
 			String url = "http://112.137.129.214:58774/v2.1/servers/" + m.getCode();
 			MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
