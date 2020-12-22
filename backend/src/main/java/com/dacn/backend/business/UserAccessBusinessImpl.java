@@ -69,27 +69,29 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 					int machineCount = 1;
 					for(int i=0; i < mySheet.getPhysicalNumberOfRows(); i++) {		
 				        XSSFRow row = mySheet.getRow(i);
-				        User user = new User();
-				        if (count > studCount) {
-				        	count = 1;
-				        	machineCount++;
-				        } 
-				        if (count <= studCount) {
-				        	if (machineCount <= machine) {
-				        		user.setAssignedMachineId(machineCount*10);
-					        	user.setMachineUsername("user" + count);
-					        	user.setMachinePassword("user" + count);
-					        	count++;
-				        	}
-				        } 
-				        user.setClassName(className);
-				        user.setRole("std");
-				        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
-				        user.setUsername(Integer.toString(user.getStudentId()));
-						user.setPassword(Integer.toString(user.getStudentId()));
-						user.setName(row.getCell(2).getStringCellValue());
-						lst.add(user);
-						userRepo.save(user);
+				        if (row.getPhysicalNumberOfCells() != 0) {
+				        	User user = new User();
+					        if (count > studCount) {
+					        	count = 1;
+					        	machineCount++;
+					        } 
+					        if (count <= studCount) {
+					        	if (machineCount <= machine) {
+					        		user.setAssignedMachineId(machineCount*10);
+						        	user.setMachineUsername("user" + count);
+						        	user.setMachinePassword("user" + count);
+						        	count++;
+					        	}
+					        } 
+					        user.setClassName(className);
+					        user.setRole("std");
+					        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
+					        user.setUsername(Integer.toString(user.getStudentId()));
+							user.setPassword(Integer.toString(user.getStudentId()));
+							user.setName(row.getCell(2).getStringCellValue());
+							lst.add(user);
+							userRepo.save(user);
+				        }				        
 					}	
 					machineManageBusiness.createMachine((int) machine);
 				}
@@ -102,27 +104,29 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 					int machineCount = 1;
 					for (int i = 0; i < mySheet.getPhysicalNumberOfRows(); i++) {
 				        HSSFRow row = mySheet.getRow(i);
-				        User user = new User();
-				        if (count > studCount) {
-				        	count = 1;
-				        	machineCount++;
-				        } 
-				        if (count <= studCount) {
-				        	if (machineCount <= machine) {
-				        		user.setAssignedMachineId(machineCount*10);
-					        	user.setMachineUsername("user" + count);
-					        	user.setMachinePassword("user" + count);
-					        	count++;
-				        	}
-				        } 
-				        user.setClassName(className);
-				        user.setRole("std");
-				        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
-				        user.setUsername(Integer.toString(user.getStudentId()));
-				        user.setPassword(Integer.toString(user.getStudentId()));
-				        user.setName(row.getCell(2).getStringCellValue());
-				        lst.add(user);
-				        userRepo.save(user);
+				        if (row.getPhysicalNumberOfCells() != 0) {
+					        User user = new User();
+					        if (count > studCount) {
+					        	count = 1;
+					        	machineCount++;
+					        } 
+					        if (count <= studCount) {
+					        	if (machineCount <= machine) {
+					        		user.setAssignedMachineId(machineCount*10);
+						        	user.setMachineUsername("user" + count);
+						        	user.setMachinePassword("user" + count);
+						        	count++;
+					        	}
+					        } 
+					        user.setClassName(className);
+					        user.setRole("std");
+					        user.setStudentId(Double.valueOf(row.getCell(1).getNumericCellValue()).intValue());
+					        user.setUsername(Integer.toString(user.getStudentId()));
+					        user.setPassword(Integer.toString(user.getStudentId()));
+					        user.setName(row.getCell(2).getStringCellValue());
+					        lst.add(user);
+					        userRepo.save(user);
+				        }
 				    }
 					machineManageBusiness.createMachine((int) machine);
 				}		
