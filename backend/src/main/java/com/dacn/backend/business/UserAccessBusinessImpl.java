@@ -77,7 +77,7 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 					        } 
 					        if (count <= studCount) {
 					        	if (machineCount <= machine) {
-					        		user.setAssignedMachineId(machineCount*10);
+					        		user.setAssignedMachineId(machineCount);
 						        	user.setMachineUsername("user" + count);
 						        	user.setMachinePassword("user" + count);
 						        	count++;
@@ -112,7 +112,7 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 					        } 
 					        if (count <= studCount) {
 					        	if (machineCount <= machine) {
-					        		user.setAssignedMachineId(machineCount*10);
+					        		user.setAssignedMachineId(machineCount);
 						        	user.setMachineUsername("user" + count);
 						        	user.setMachinePassword("user" + count);
 						        	count++;
