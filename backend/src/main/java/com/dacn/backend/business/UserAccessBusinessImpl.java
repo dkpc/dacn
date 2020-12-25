@@ -172,16 +172,16 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 		if (!user.getPassword().equals(password)) {
 			throw new Exception("wrong password");
 		}
+		LoginRes res = new LoginRes();
+		res.setUser(user);
 		if (user.getRole().equals("std")) {
-			
-			LoginRes res = new LoginRes();
-			res.setUser(user);
 			Machine machine = machineRepo.getOne(user.getAssignedMachineId());
 			String console = machineManageBusiness.getConsoleLink(machine.getCode());
 			res.setConsole(console);
 			return res;
 		}
-		return user;
+		res.setConsole("");
+		return res;
 	}
 
 	@Override
