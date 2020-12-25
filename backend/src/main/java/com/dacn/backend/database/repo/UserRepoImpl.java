@@ -61,7 +61,7 @@ public class UserRepoImpl implements UserRepoCustom{
 		StringBuilder sb = new StringBuilder();
         
         sb.append("SELECT t FROM User t ");
-        sb.append("WHERE t.username = :username");   
+        sb.append("WHERE t.username LIKE :username");   
 		
         Query qr = em.createQuery(sb.toString());
         

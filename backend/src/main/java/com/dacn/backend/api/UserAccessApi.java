@@ -58,7 +58,7 @@ public class UserAccessApi {
 	@ApiOperation(value = "Login", response = ResponseEntity.class)
 	@PostMapping("/user/login/")
 	public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) throws Exception{
-		return new ResponseEntity<>(userAccessBusiness.login(username, password), HttpStatus.OK);
+		return new ResponseEntity<>(userAccessBusiness.login(username.trim(), password.trim()), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "Delete by classname", response = ResponseEntity.class)
