@@ -32,7 +32,7 @@ public class SubmissionRepoImpl implements SubmissionRepoCustom{
 
 	
 	@Override
-	public Submission getSubByIds(int studentId, int examId) {
+	public int getSubByIds(int studentId, int examId) {
 		StringBuilder sb = new StringBuilder();
         
         sb.append("SELECT t FROM Submission t ");
@@ -46,7 +46,10 @@ public class SubmissionRepoImpl implements SubmissionRepoCustom{
             
 		List<Submission> lst = qr.getResultList();
         
-        return lst.get(0);
+		if(lst.isEmpty()) {
+			return 99999;
+		}
+        return lst.get(0).getExamId();
 	}
 
 

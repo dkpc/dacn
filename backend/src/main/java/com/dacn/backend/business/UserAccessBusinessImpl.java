@@ -174,13 +174,12 @@ public class UserAccessBusinessImpl implements UserAccessBusiness{
 		}
 		LoginRes res = new LoginRes();
 		res.setUser(user);
+		res.setConsole("");
 		if (user.getRole().equals("std")) {
 			Machine machine = machineRepo.getOne(user.getAssignedMachineId());
 			String console = machineManageBusiness.getConsoleLink(machine.getCode());
 			res.setConsole(console);
-			return res;
 		}
-		res.setConsole("");
 		return res;
 	}
 

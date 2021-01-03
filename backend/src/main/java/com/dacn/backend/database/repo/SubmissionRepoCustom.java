@@ -7,5 +7,5 @@ public interface SubmissionRepoCustom {
 	
 	public Submission addSubmission(int studentId, int examId, String answer, int mark);
 	
-	public Submission getSubByIds(int studentId, int examId);
+	public int getSubByIds(int studentId, int examId);
 }
