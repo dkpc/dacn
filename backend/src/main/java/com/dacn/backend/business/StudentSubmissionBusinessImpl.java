@@ -50,11 +50,11 @@ public class StudentSubmissionBusinessImpl implements StudentSubmissionBusiness{
 		List<String> ans = TextUtil.dataToList(file);
 		int mark = gradingBusiness.grading(examId, ans);
 		Submission sub;
-		Submission tempSub = submissionRepo.getSubByIds(studentId, examId);
-		if (tempSub == null) {
+		int tempSub = submissionRepo.getSubByIds(studentId, examId);
+		if (tempSub == 99999) {
 			sub = submissionRepo.addSubmission(studentId, examId, TextUtil.getDataFromTxt(file), mark);
 		} else {
-			sub = submissionRepo.addSubmission(tempSub.getId(),studentId, examId, TextUtil.getDataFromTxt(file), mark);
+			sub = submissionRepo.addSubmission(tempSub,studentId, examId, TextUtil.getDataFromTxt(file), mark);
 		}
 		
 		if (sub == null) {
