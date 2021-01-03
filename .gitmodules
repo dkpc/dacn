@@ -1,0 +1,3 @@
+[submodule "dacn_front_end"]
+	path = dacn_front_end
+	url = https://gitlab.com/hadan44/dacn_front_end
