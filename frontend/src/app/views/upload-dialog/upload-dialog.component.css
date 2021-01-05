@@ -1,0 +1,88 @@
+#upload-table{
+    margin-top: 20px;
+}
+.doc_name{
+    white-space: nowrap;
+    max-width: 364px;
+    min-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+    font-size: 13px;
+    padding-top: 2px;
+    padding-left: 4px;
+}
+.doc_item{
+    display: inline-flex;
+    padding: 3px;
+    background-color: #3c6cf0;
+    border-radius: 5px;
+    max-width: 400px;
+    justify-content: space-between;
+}
+
+.btn{
+  width: 70px;
+}
+
+.btn1{
+    width: 120px;
+}
+
+::ng-deep .mat-dialog-content {
+    overflow: visible;
+  }
+
+  ::ng-deep .mat-card-header {
+    position: relative;
+    background: rgb(63, 81, 181);
+    height: 60px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 2px 10px 10px 10px;
+  }
+  
+  ::ng-deep.mat-card-content {
+    padding: 20px 6px 14px 24px;
+  }
+
+  ::ng-deep .mat-card {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    border-radius: 10px !important;
+  }
+
+  ::ng-deep mat-dialog-container {
+    box-shadow: none !important;
+    background: none !important;
+  }
+
+  ::ng-deep #dialog-field .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+  ::ng-deep .mat-form-field{
+      width: 96%;
+  }
+  ::ng-deep .ngx-file-drop__drop-zone{
+      width: 98%;
+      margin: 0 !important;
+  }
+
+.submit-btn{
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+  ::ng-deep .mat-card-header-text {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 18px !important;
+    color: white;
+  }
+
+  ::ng-deep .cdk-overlay-pane{
+    max-width: 40vw;
+  }

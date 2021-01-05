@@ -1,0 +1,36 @@
+<div class="main">
+  <mat-card style="margin-top: 10%">
+    <mat-card-content>
+      <img
+        src="../../../assets/images/Logo_UET.png"
+        alt=""
+        style="width: 120px"
+      />
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h2 style="margin-top: 20px">Hệ điều hành mạng online</h2>
+        <mat-error *ngIf="loginInvalid">
+          Tài khoản hoặc mật khẩu không hợp lệ!
+        </mat-error>
+        <mat-form-field appearance="outline">
+          <mat-label>Tài khoản</mat-label>
+          <input
+            matInput
+            placeholder="1702xxxx"
+            formControlName="username"
+            required
+          />
+          <mat-error> Hãy nhập chính xác tài khoản </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput type="password" formControlName="password" required />
+          <mat-error> Hãy nhập chính xác mật khẩu </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="login-btn">
+          Đăng nhập
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+<ngx-spinner></ngx-spinner>

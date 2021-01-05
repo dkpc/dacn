@@ -1,0 +1,145 @@
+<app-header></app-header>
+<div class="center container">
+  <div>
+    <div>Số máy ảo hiện tại trên server: <strong>{{VMcount}}</strong> 
+      <button mat-raised-button color="warn" (click)="delete()"style="margin-left: 20px;">
+      Xóa tất cả máy ảo
+    </button>
+    <div class="alert-delete-state"></div>
+  </div>
+    <table
+        mat-table
+        [dataSource]="vmList"
+        style="width: 50%;"
+      >
+        <!-- Position Column -->
+        <ng-container matColumnDef="id"> 
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;">Id</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+         <!-- Student ID Column -->
+         <ng-container matColumnDef="vm_code">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 65%;">Machine Code</th>
+            <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+          </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="student_count">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%;">Total users</th>
+          <td mat-cell *matCellDef="let element">{{ element.studentCount }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedVMColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedVMColumns"></tr>
+      </table>
+  </div>
+
+  <div style="font-weight: bold; padding-bottom: 5px; margin-top: 30px">Tạo máy ảo</div>
+  <ngx-file-drop
+    dropZoneLabel="Drop files here"
+    (onFileDrop)="dropped($event)"
+    (onFileOver)="fileOver($event)"
+    (onFileLeave)="fileLeave($event)"
+    id="file_drop"
+  >
+    <ng-template
+      #elseBlock
+      ngx-file-drop-content-tmp
+      let-openFileSelector="openFileSelector"
+    >
+      <div type="button" (click)="openFileSelector()">
+        Chọn file hoặc kéo file vào đây
+      </div>
+    </ng-template>
+  </ngx-file-drop>
+  <div id="upload-table">
+    <div style="font-weight: bold">Tên file</div>
+    <div *ngFor="let item of files; let i = index">
+      <div class="doc_item">
+        <div class="doc_name">{{ item.relativePath }}</div>
+        <span
+          class="material-icons removeDoc"
+          role="button"
+          (click)="deleteDoc(i)"
+          >clear</span
+        >
+      </div>
+      
+    </div>
+    <form class="example-form" style="margin-top: 10px">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Đặt Tên Lớp</mat-label>
+        <input matInput [formControl]="classnameFormControl">
+        <mat-error *ngIf="classnameFormControl.hasError('required')">
+          <strong> Yêu cầu đặt tên lớp </strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+    <div class="function_btn">
+      <button mat-raised-button color="primary" (click)="submit()" style="width: 120px">
+        Tạo máy ảo
+      </button>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px; padding-bottom: 10px">
+    <div style="font-weight: bold; padding-bottom: 5px">Danh sách sinh viên</div>
+    <div class="mat-elevation-z8" >
+        <mat-form-field style="margin-left: 20px; padding-top: 20px">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Tìm kiếm">
+          </mat-form-field>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        id="student_info"
+      >
+        <!-- Position Column -->
+        <ng-container matColumnDef="id"> 
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%;">No.</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+         <!-- Student ID Column -->
+         <ng-container matColumnDef="student_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 16%;">Student ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.studentId }}</td>
+          </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 22%;">Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Machine Username Column -->
+        <ng-container matColumnDef="machine_user">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 22%;">Machine Username</th>
+            <td mat-cell *matCellDef="let element">{{ element.machineUsername }}</td>
+          </ng-container>
+
+        <!-- Account Column -->
+        <ng-container matColumnDef="account">
+          <th mat-header-cell *matHeaderCellDef>Account Info</th>
+          <td mat-cell *matCellDef="let element">
+            Account: {{ element.username }}<br>
+            Password: {{ element.username }}
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef=" displayedStudentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns:  displayedStudentColumns"></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+  </div>
+</div>
+<ngx-spinner></ngx-spinner>
+<div id="success-state" [ngStyle] = "messColor()" >
+  <mat-icon >{{iconState}}</mat-icon>
+  <div style="padding-top: 3px; color: white;">{{deleteVMstate}}</div>
+</div>

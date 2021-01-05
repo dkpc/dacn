@@ -1,0 +1,60 @@
+#upload-table{
+    margin-top: 20px;
+}
+.doc_name{
+    white-space: nowrap;
+    max-width: 364px;
+    min-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+    font-size: 13px;
+    padding-top: 2px;
+    padding-left: 4px;
+}
+.doc_item{
+    display: inline-flex;
+    padding: 3px;
+    background-color: #3c6cf0;
+    border-radius: 5px;
+    max-width: 400px;
+    justify-content: space-between;
+}
+.function_btn{
+    display: flex;
+    width: 260px;
+    justify-content: space-between;
+}
+
+table{
+    width: 100%;
+  }
+  
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+::ng-deep .mat-form-field-label-wrapper { top: -1em; }
+::ng-deep .mat-form-field-subscript-wrapper{
+    margin-top: 0.1em !important;
+}
+
+.material-icons{
+    font-size: 22px !important;
+    color: white;
+}
+
+#success-state{
+    display: inline-flex;
+    border-radius: 5px;
+    padding: 5px 12px 5px 6px;
+    position: fixed;
+    top: 64px;
+    right: 0px;
+    opacity: 1;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 3s linear;
+  }

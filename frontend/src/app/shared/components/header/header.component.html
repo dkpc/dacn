@@ -1,0 +1,27 @@
+<p>
+  <mat-toolbar color="primary" style="font-size: 18px;">
+    <div class="container main">
+      <img
+      src="../../../assets/images/Logo_UET.png"
+      alt=""
+      style="width: 40px; background-color: white; border-radius: 50%;"
+    />
+    <div style="margin-top: 5px;margin-left: 5px" *ngIf = "role">
+      Quản lý THHĐHM
+    </div>
+    <div style="margin-top: 5px;margin-left: 5px" *ngIf = "!role">
+      Thực hành hệ điều hành mạng Online
+    </div>
+    <span class="example-spacer"></span>
+    <span style="margin-top: 5px">Hello, {{ username }}</span>
+    <button
+      mat-icon-button
+      class="example-icon favorite-icon"
+      aria-label="Example icon-button with heart icon"
+    > 
+      <mat-icon *ngIf = "!role" (click) = "openDialog()" style="margin-right: 5px;margin-left: 5px">upload</mat-icon>
+      <mat-icon (click) = "logout()">logout</mat-icon>
+    </button>
+    </div>
+  </mat-toolbar>
+</p>

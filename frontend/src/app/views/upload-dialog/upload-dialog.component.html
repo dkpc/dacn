@@ -1,0 +1,116 @@
+<mat-dialog-content>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Nộp file bài tập</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+  <form class="example-form" style="margin-top: 10px" [formGroup]="infoSubmitForm" (ngSubmit)="submit()">
+    <div fxLayout="row" fxLayout.xs="column">
+      <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+        <div class="pb-1">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Tên Lớp</mat-label>
+            <input matInput formControlName="classname">
+            <mat-error *ngIf="infoSubmitForm.get('classname').hasError('required')">
+              <strong>Yêu cầu tên lớp </strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+        <div class="pb-1">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Mã bài</mat-label>
+            <input matInput formControlName="examId">
+            <mat-error *ngIf="infoSubmitForm.get('examId').hasError('required')">
+              <strong>Yêu cầu mã bài</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+
+    <div fxLayout="row" fxLayout.xs="column">
+      <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+        <div class="pb-1">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Machine Id</mat-label>
+            <input matInput formControlName="machineId">
+            <mat-error *ngIf="infoSubmitForm.get('machineId').hasError('required')">
+              <strong>Yêu cầu machine Id</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+ 
+      <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+        <div class="pb-1">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Mã sinh viên</mat-label>
+            <input matInput formControlName="studentId">
+            <mat-error *ngIf="infoSubmitForm.get('studentId').hasError('required')">
+              <strong> Yêu cầu mã sinh viên</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <ngx-file-drop
+      dropZoneLabel="Drop files here"
+      (onFileDrop)="dropped($event)"
+      (onFileOver)="fileOver($event)"
+      (onFileLeave)="fileLeave($event)"
+      id="file_drop"
+    >
+      <ng-template
+        #elseBlock
+        ngx-file-drop-content-tmp
+        let-openFileSelector="openFileSelector"
+      >
+        <div type="button" (click)="openFileSelector()">
+          Chọn file hoặc kéo file vào đây
+        </div>
+      </ng-template>
+    </ngx-file-drop>
+    <div id="upload-table">
+      <div *ngFor="let item of files; let i = index">
+        <div class="doc_item">
+          <div class="doc_name">{{ item.relativePath }}</div>
+          <span
+            class="material-icons removeDoc"
+            role="button"
+            (click)="deleteDoc(i)"
+            >clear</span
+          >
+        </div>
+      </div>
+        <button mat-raised-button color="primary" class="btn1 submit-btn" type="submit">
+          Nộp bài
+        </button>
+      </div>
+  </form>
+
+</mat-card-content>
+</mat-card>
+</mat-dialog-content>
+
+<ng-template #secondDialog>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Nộp bài tập thành công</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div><strong>Tên :</strong>{{stdName}}</div>
+      <div><strong>Mã số sinh viên :</strong> {{stdId}}</div>
+      <div><strong> Điểm :</strong> {{score}}</div>
+        <div><strong>Trạng thái :</strong> {{status}}</div>
+        <button mat-raised-button color="primary" class="btn submit-btn" (click)="close()">
+          Đóng
+        </button>
+  </mat-card-content>
+  </mat-card>
+</ng-template>
+  

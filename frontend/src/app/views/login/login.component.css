@@ -1,0 +1,24 @@
+mat-card {
+    width: 400px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+ mat-form-field {
+    display: block;
+    padding-bottom: 6px;
+  }
+  .main{
+      background-image: url('../../../assets/images/login_background.jpg'); 
+        height: 100vh;
+      background-size: cover;
+  }
+
+  .login-btn{
+    width: 160px;
+    margin-top: 5%;
+    height: 40px;
+  }
