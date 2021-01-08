@@ -43,7 +43,7 @@ public class GradingBusinessImpl implements GradingBusiness{
 		List<String> eptAnswerList = examOptionSetRepo.getExpectedAnswer(exam.getExamId());
 		if (exam.getOneWay() == 1) {
 			for (int i = 0 ; i < eptAnswerList.size(); i++) {
-				if (ans.get(i).trim().equals((eptAnswerList.get(i).trim()))) {
+				if (ans.get(i).trim().equalsIgnoreCase((eptAnswerList.get(i).trim()))) {
 					count++;
 				}
 			}
